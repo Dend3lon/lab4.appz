@@ -40,7 +40,19 @@ namespace DomainData
                 .Include(b => b.Activities)
                 .ToList();
         }
-
+        public Booking GetBookingByTimeRangeAndRoom(DateTime start, DateTime end, int roomId)
+        {
+            return _context.Bookings
+                .FirstOrDefault(b => b.StartTime <= end && b.EndTime >= start && b.RoomId == roomId);
+        }
+        public List<Booking> GetBookingsByRoomId(int roomId)
+        {
+            return _context.Bookings
+                .Include(b => b.Room)
+                .Include(b => b.Activities)
+                .Where(b => b.RoomId == roomId)
+                .ToList();
+        }
         public bool DeleteBooking(int id)
         {
             var booking = _context.Bookings.FirstOrDefault(b => b.Id == id);

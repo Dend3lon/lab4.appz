@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainData;
+using DomainData.Models;
 
 namespace lab4.appz
 {
     public class RoomManagementMenu
     {
         private readonly RoomRepository _roomRepository = new RoomRepository();
-
+        private readonly BookingRepository _bookingRepository = new BookingRepository();
         public void Show()
         {
             while (true)
@@ -88,6 +89,12 @@ namespace lab4.appz
             if (room != null)
             {
                 Console.WriteLine($"Кімната №{room.RoomNumber}, Місткість: {room.Capacity}");
+                var bookings = _bookingRepository.GetBookingsByRoomId(number); 
+                Console.WriteLine("Бронювання в цій кімнаті:");
+                foreach (var booking in bookings)
+                {
+                    Console.WriteLine($"Бронювання №{booking.Id}: {booking.VisitorName}, з {booking.StartTime} до {booking.EndTime}");
+                }
             }
             else
             {

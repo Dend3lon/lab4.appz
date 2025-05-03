@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DomainData;
+using DomainData.Models;
 
 namespace lab4.appz
 {
@@ -50,11 +51,24 @@ namespace lab4.appz
             Console.Write("Ім'я відвідувача: ");
             string visitor = Console.ReadLine();
 
-            Console.Write("Дата початку (yyyy-MM-dd HH:mm): ");
-            DateTime start = DateTime.Parse(Console.ReadLine());
+            DateTime start, end;
+            Booking booking;
 
-            Console.Write("Дата закінчення (yyyy-MM-dd HH:mm): ");
-            DateTime end = DateTime.Parse(Console.ReadLine());
+            do
+            {
+                Console.Write("Дата початку (yyyy-MM-dd HH:mm): ");
+                while (!DateTime.TryParse(Console.ReadLine(), out start))
+                    Console.Write("Неправильний формат. Спробуйте ще раз: ");
+
+                Console.Write("Дата закінчення (yyyy-MM-dd HH:mm): ");
+                while (!DateTime.TryParse(Console.ReadLine(), out end))
+                    Console.Write("Неправильний формат. Спробуйте ще раз: ");
+
+                booking = _bookingRepository.GetBookingByTimeRangeAndRoom(start, end, roomNumber);
+                if (booking != null)
+                    Console.WriteLine("Цей час вже зайнятий. Спробуйте інші дати.");
+
+            } while (booking != null);
 
             var activities = _activityRepository.GetAllActivities();
             Console.WriteLine("Список активностей:");
@@ -63,12 +77,13 @@ namespace lab4.appz
                 Console.WriteLine($"{activity.Id}. {activity.Name}");
             }
 
+            
             Console.Write("Введіть ID активностей через кому: ");
             var ids = Console.ReadLine()
                 .Split(',')
                 .Select(id => int.Parse(id.Trim()))
                 .ToList();
-
+            
             try
             {
                 _bookingRepository.BookRoom(roomNumber, visitor, start, end, ids);
