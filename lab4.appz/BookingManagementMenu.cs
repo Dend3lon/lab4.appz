@@ -1,122 +1,139 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DomainData;
+﻿using BusinessLogic.Services;
+using BusinessLogic.BusinessModels;
 using DomainData.Models;
 
-namespace lab4.appz
+
+public class BookingManagementMenu
 {
-    public class BookingManagementMenu
+    private readonly BookingService _bookingService;
+    private readonly RoomService _roomService;
+    private readonly ActivityService _activityService;
+
+    public BookingManagementMenu(
+        BookingService bookingService,
+        RoomService roomService,
+        ActivityService activityService)
     {
-        private readonly BookingRepository _bookingRepository = new BookingRepository();
-        private readonly ActivityRepository _activityRepository = new ActivityRepository();
-        public void Show()
+        _bookingService = bookingService;
+        _roomService = roomService;
+        _activityService = activityService;
+    }
+
+    public void Show()
+    {
+        while (true)
         {
-            while (true)
+            Console.Clear();
+            Console.WriteLine("=== Управління бронюваннями ===");
+            Console.WriteLine("1. Додати бронювання");
+            Console.WriteLine("2. Видалити бронювання");
+            Console.WriteLine("3. Переглянути всі бронювання");
+            Console.WriteLine("4. Назад");
+
+            Console.Write("Оберіть дію: ");
+            var choice = Console.ReadLine();
+
+            switch (choice)
             {
-                Console.Clear();
-                Console.WriteLine("=== Управління бронюваннями ===");
-                Console.WriteLine("1. Переглянути всі бронювання");
-                Console.WriteLine("2. Видалити бронювання");
-                Console.WriteLine("3. Назад");
-
-                Console.Write("Оберіть дію: ");
-                var choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        ViewAllBookings();
-                        break;
-                    case "2":
-                        DeleteBooking();
-                        break;
-                    case "3":
-                        return;
-                    default:
-                        Console.WriteLine("Невірний вибір.");
-                        break;
-                }
-                Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-                Console.ReadKey();
+                case "1":
+                    DeleteBooking();
+                    break;
+                case "2":
+                    ViewAllBookings();
+                    break;
+                case "3":
+                    return;
+                default:
+                    Console.WriteLine("Невірний вибір.");
+                    break;
             }
+
+            Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
+            Console.ReadKey();
         }
-        public void BookRoom()
+    }
+
+    public void BookRoom()
+    {
+        var rooms = _roomService.GetAllRooms().ToList();
+        
+        Console.WriteLine("Доступні кімнати:");
+        foreach (var room in rooms)
         {
-            Console.Write("Номер кімнати: ");
-            int roomNumber = int.Parse(Console.ReadLine());
-
-            Console.Write("Ім'я відвідувача: ");
-            string visitor = Console.ReadLine();
-
-            DateTime start, end;
-            Booking booking;
-
-            do
-            {
-                Console.Write("Дата початку (yyyy-MM-dd HH:mm): ");
-                while (!DateTime.TryParse(Console.ReadLine(), out start))
-                    Console.Write("Неправильний формат. Спробуйте ще раз: ");
-
-                Console.Write("Дата закінчення (yyyy-MM-dd HH:mm): ");
-                while (!DateTime.TryParse(Console.ReadLine(), out end))
-                    Console.Write("Неправильний формат. Спробуйте ще раз: ");
-
-                booking = _bookingRepository.GetBookingByTimeRangeAndRoom(start, end, roomNumber);
-                if (booking != null)
-                    Console.WriteLine("Цей час вже зайнятий. Спробуйте інші дати.");
-
-            } while (booking != null);
-
-            var activities = _activityRepository.GetAllActivities();
-            Console.WriteLine("Список активностей:");
-            foreach (var activity in activities)
-            {
-                Console.WriteLine($"{activity.Id}. {activity.Name}");
-            }
-
-            
-            Console.Write("Введіть ID активностей через кому: ");
-            var ids = Console.ReadLine()
-                .Split(',')
-                .Select(id => int.Parse(id.Trim()))
-                .ToList();
-            
-            try
-            {
-                _bookingRepository.BookRoom(roomNumber, visitor, start, end, ids);
-                Console.WriteLine("Бронювання успішне!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Помилка: {ex.Message}");
-            }
+            Console.WriteLine($"{room.Id}. Номер: {room.RoomNumber}, Місткість: {room.Capacity}");
         }
-        private void ViewAllBookings()
+        
+        Console.Write("Оберіть ID кімнати: ");
+        if (!int.TryParse(Console.ReadLine(), out int roomId))
         {
-            var bookings = _bookingRepository.GetAllBookings();
-            foreach (var booking in bookings)
+            Console.WriteLine("Некоректне значення.");
+            return;
+        }
+        Console.Write("Введіть ім'я відвідувача: ");
+        string visitorName = Console.ReadLine();
+        DateTime startTime, endTime;
+        BookingBusinessModel booking;
+        do
+        {
+            Console.Write("Початок (yyyy-MM-dd HH:mm): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out startTime))
             {
-                Console.WriteLine($"Бронювання №{booking.Id}: {booking.VisitorName} в кімнаті №{booking.Room.RoomNumber}, з {booking.StartTime} до {booking.EndTime}");
-                Console.WriteLine("Активності:");
-                foreach (var act in booking.Activities)
-                {
-                    Console.WriteLine($" - {act.Name}");
-                }
-                Console.WriteLine();
+                Console.WriteLine("Невірний формат дати.");
+                return;
             }
+
+            Console.Write("Кінець (yyyy-MM-dd HH:mm): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out endTime))
+            {
+                Console.WriteLine("Невірний формат дати.");
+                return;
+            }
+            booking = _bookingService.GetBookingByRoomAndTime(roomId, startTime, endTime);
+            if (booking != null)
+            {
+                Console.WriteLine("Ця кімната вже заброньована на цей час. Спробуйте ще раз.");
+            }
+        } while (booking != null); 
+        Console.WriteLine("Доступні активності:");
+        var activities = _activityService.GetAllActivities().ToList();
+        foreach (var activity in activities)
+        {
+            Console.WriteLine($"{activity.Id}. {activity.Name}");
         }
 
-        private void DeleteBooking()
+        Console.Write("Введіть ID активностей через кому (наприклад 1,2): ");
+        var input = Console.ReadLine();
+        var activityIds = input.Split(',')
+            .Select(s => int.TryParse(s.Trim(), out int id) ? id : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id.Value)
+            .ToList();
+
+        _bookingService.BookRoom(roomId, visitorName, startTime, endTime, activityIds);
+
+        Console.WriteLine("Бронювання успішне.");
+    }
+
+    private void DeleteBooking()
+    {
+        Console.Write("Введіть ID бронювання для видалення: ");
+        if (!int.TryParse(Console.ReadLine(), out int bookingId))
         {
-            Console.Write("Введіть ID бронювання для видалення: ");
-            int id = int.Parse(Console.ReadLine());
-            if (_bookingRepository.DeleteBooking(id))
-                Console.WriteLine("Бронювання видалено.");
-            else
-                Console.WriteLine("Бронювання не знайдено.");
+            Console.WriteLine("Некоректне значення.");
+            return;
+        }
+
+        _bookingService.DeleteBooking(bookingId);
+        Console.WriteLine("Бронювання видалено.");
+    }
+
+    private void ViewAllBookings()
+    {
+        var bookings = _bookingService.GetAllBookings();
+        foreach (var booking in bookings)
+        {
+            Console.WriteLine($"ID: {booking.Id},Забронював: {booking.VisitorName} Кімната: {booking.RoomId}, {booking.StartTime} - {booking.EndTime},");
+            //Console.WriteLine("  Активності: " + string.Join(", ", booking.Activities.Select(a => a.Name)));
         }
     }
 }
