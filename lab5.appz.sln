@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainData", "DomainData\DomainData.csproj", "{E868A1D6-6FAE-4EEE-9DE3-4DF873434976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab4.appz", "lab4.appz\lab4.appz.csproj", "{EEE431BD-13DA-49C7-88B7-886D2B2C9FCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab5.appz", "lab4.appz\lab5.appz.csproj", "{EEE431BD-13DA-49C7-88B7-886D2B2C9FCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{E0C850A2-235F-4E72-ADBB-16A90436F2C1}"
 EndProject

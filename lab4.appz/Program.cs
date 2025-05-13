@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using BusinessLogic;
 using BusinessLogic.Services;
 using DomainData;
 using DomainData.Models;
 using DomainData.UoW;
+using Microsoft.Extensions.DependencyInjection;
 
 class Program
 {
@@ -11,16 +13,19 @@ class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
+        var context = new AntiCafeContext();
+        var services = new ServiceCollection();
 
-        var mapper = MapperConfig.ConfigureMapper();
-        var unitOfWork = new UnitOfWork();
+        services.AddDbContext<AntiCafeContext>();
+        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<RoomService>();
+        services.AddScoped<ActivityService>();
+        services.AddScoped<BookingService>();
+        services.AddTransient<Menu>();
 
-        var roomService = new RoomService(unitOfWork, mapper);
-        var activityService = new ActivityService(unitOfWork, mapper);
-        var bookingService = new BookingService(unitOfWork, mapper);
-
-        var menu = new Menu(roomService, activityService, bookingService);
+        var serviceProvider = services.BuildServiceProvider();
+        var menu = serviceProvider.GetRequiredService<Menu>();
         menu.Show();
     }
-
 }

@@ -73,7 +73,12 @@ public class RoomManagementMenu
 
     private void DeleteRoom()
     {
+        var rooms = _roomService.GetAllRooms();
         Console.Write("Введіть ID кімнати для видалення: ");
+        foreach (var room in rooms)
+        {
+            Console.WriteLine($"{room.Id}. Номер: {room.RoomNumber}, Місткість: {room.Capacity}");
+        }
         if (!int.TryParse(Console.ReadLine(), out int roomId))
         {
             Console.WriteLine("Некоректний ID.");

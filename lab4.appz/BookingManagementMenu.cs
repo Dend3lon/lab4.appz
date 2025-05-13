@@ -25,10 +25,9 @@ public class BookingManagementMenu
         {
             Console.Clear();
             Console.WriteLine("=== Управління бронюваннями ===");
-            Console.WriteLine("1. Додати бронювання");
-            Console.WriteLine("2. Видалити бронювання");
-            Console.WriteLine("3. Переглянути всі бронювання");
-            Console.WriteLine("4. Назад");
+            Console.WriteLine("1. Видалити бронювання");
+            Console.WriteLine("2. Переглянути всі бронювання");
+            Console.WriteLine("3. Назад");
 
             Console.Write("Оберіть дію: ");
             var choice = Console.ReadLine();
