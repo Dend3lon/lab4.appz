@@ -6,14 +6,14 @@ namespace DomainData.UoW
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AntiCafeContext _context;
-        private GenericRepository<Room> _roomRepo;
-        private GenericRepository<Activity> _activityRepo;
-        private GenericRepository<Booking> _bookingRepo;
+        private IGenericRepository<Room> _roomRepo;
+        private IGenericRepository<Activity> _activityRepo;
+        private IGenericRepository<Booking> _bookingRepo;
         public UnitOfWork()
         {
             _context = new AntiCafeContext();
         }
-        public GenericRepository<Room> RoomRepo
+        public IGenericRepository<Room> RoomRepo
         {
             get
             {
@@ -22,7 +22,7 @@ namespace DomainData.UoW
                 return _roomRepo;
             }
         }
-        public GenericRepository<Activity> ActivityRepo
+        public IGenericRepository<Activity> ActivityRepo
         {
             get
             {
@@ -31,7 +31,7 @@ namespace DomainData.UoW
                 return _activityRepo;
             }
         }
-        public GenericRepository<Booking> BookingRepo
+        public IGenericRepository<Booking> BookingRepo
         {
             get
             {

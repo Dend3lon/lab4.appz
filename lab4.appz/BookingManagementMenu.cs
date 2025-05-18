@@ -1,6 +1,5 @@
 ﻿using BusinessLogic.Services;
 using BusinessLogic.BusinessModels;
-using DomainData.Models;
 
 
 public class BookingManagementMenu
@@ -107,8 +106,7 @@ public class BookingManagementMenu
             .Where(id => id.HasValue)
             .Select(id => id.Value)
             .ToList();
-
-        _bookingService.BookRoom(roomId, visitorName, startTime, endTime, activityIds);
+        _bookingService.BookRoom(new BookingBusinessModel {RoomId = roomId, VisitorName = visitorName, StartTime = startTime, EndTime = endTime, ActivityIds = activityIds});
 
         Console.WriteLine("Бронювання успішне.");
     }

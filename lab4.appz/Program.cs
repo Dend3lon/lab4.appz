@@ -1,9 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using BusinessLogic;
 using BusinessLogic.Services;
 using DomainData;
-using DomainData.Models;
 using DomainData.UoW;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +11,7 @@ class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        var context = new AntiCafeContext();
+        
         var services = new ServiceCollection();
 
         services.AddDbContext<AntiCafeContext>();

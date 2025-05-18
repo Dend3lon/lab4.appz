@@ -10,9 +10,9 @@ namespace DomainData.UoW
 {
     public interface IUnitOfWork : IDisposable
     {
-        public GenericRepository<Room> RoomRepo { get; }
-        public GenericRepository<Activity> ActivityRepo { get; }
-        public GenericRepository<Booking> BookingRepo { get; }
+        public IGenericRepository<Room> RoomRepo { get; }
+        public IGenericRepository<Activity> ActivityRepo { get; }
+        public IGenericRepository<Booking> BookingRepo { get; }
         public void Save();
     }
 }

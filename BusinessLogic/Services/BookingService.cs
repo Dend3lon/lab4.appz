@@ -16,25 +16,14 @@ namespace BusinessLogic.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public void BookRoom(int roomNumber, string visitor, DateTime start, DateTime end, List<int> activityIds)
+        public void BookRoom(BookingBusinessModel bookingBusinessModel)
         {
-            var room = _unitOfWork.RoomRepo.GetAll().FirstOrDefault(r => r.RoomNumber == roomNumber);
-            if (room == null)
-                throw new ArgumentException("Кімната не знайдена");
-
+            var booking = _mapper.Map<Booking>(bookingBusinessModel);
             var activities = _unitOfWork.ActivityRepo.GetAll()
-                                .Where(a => activityIds.Contains(a.Id))
-                                .ToList();
+                .Where(a => bookingBusinessModel.ActivityIds.Contains(a.Id))
+                .ToList();
 
-            var booking = new Booking
-            {
-                RoomId = room.Id,
-                VisitorName = visitor,
-                StartTime = start,
-                EndTime = end,
-                Activities = activities
-            };
-
+            booking.Activities = activities;
             _unitOfWork.BookingRepo.Create(booking);
             _unitOfWork.Save();
         }
