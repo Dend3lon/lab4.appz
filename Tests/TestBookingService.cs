@@ -53,11 +53,6 @@ namespace Tests
             var testRoom = new Room { Id = 1, RoomNumber = 1, Capacity = 10 };
             var testActivity = new Activity { Id = 1, Name = "TestActivity" };
 
-
-            _roomRepositoryMock
-                .Setup(r => r.GetAll())
-                .Returns(new List<Room> { testRoom });
-
             _activityRepositoryMock
                 .Setup(a => a.GetAll())
                 .Returns(new List<Activity> { testActivity });

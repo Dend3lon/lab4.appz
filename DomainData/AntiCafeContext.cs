@@ -11,7 +11,7 @@ namespace DomainData
         public DbSet<Booking> Bookings { get; set; }
         public AntiCafeContext()
         {
-            DataBasePath = "C:\\Users\\User\\source\\repos\\lab5.appz\\DomainData\\anticafe.db";
+            DataBasePath = "C:\\Users\\User\\source\\repos\\lab6.appz\\DomainData\\anticafe.db";
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
