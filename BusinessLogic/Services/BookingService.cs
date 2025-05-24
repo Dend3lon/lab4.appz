@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessLogic.BusinessModels;
+using BusinessModels;
 using DomainData.Repositories;
 using DomainData.UoW;
 using DomainData;

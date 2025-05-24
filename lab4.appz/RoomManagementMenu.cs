@@ -1,5 +1,5 @@
 ﻿using BusinessLogic.Services;
-using BusinessLogic.BusinessModels;
+using BusinessModels;
 
 public class RoomManagementMenu
 {

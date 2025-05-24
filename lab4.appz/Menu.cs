@@ -1,6 +1,4 @@
 ﻿using BusinessLogic.Services;
-
-
 public class Menu
 {
     private readonly RoomManagementMenu _roomMenu;

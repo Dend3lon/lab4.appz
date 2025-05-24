@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using BusinessLogic;
 using BusinessLogic.Services;
 using DomainData;
 using DomainData.UoW;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapperProfiles;
 
 class Program
 {
@@ -15,7 +15,7 @@ class Program
         var services = new ServiceCollection();
 
         services.AddDbContext<AntiCafeContext>();
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+        services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<RoomService>();
         services.AddScoped<ActivityService>();

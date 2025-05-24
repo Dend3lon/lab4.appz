@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AutoMapperProfiles\AutoMapperProfiles.csproj" />
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
   </ItemGroup>
 
 </Project>
