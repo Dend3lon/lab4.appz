@@ -4,6 +4,7 @@ using DomainData.Repositories;
 using DomainData.UoW;
 using DomainData;
 using DomainData.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services
 {
@@ -19,6 +20,12 @@ namespace BusinessLogic.Services
         public void BookRoom(BookingBusinessModel bookingBusinessModel)
         {
             var booking = _mapper.Map<Booking>(bookingBusinessModel);
+            var room = _unitOfWork.RoomRepo
+                .GetAll()
+                .FirstOrDefault(r => r.RoomNumber == bookingBusinessModel.RoomNumber);
+
+            booking.RoomId = room.Id;
+
             var activities = _unitOfWork.ActivityRepo.GetAll()
                 .Where(a => bookingBusinessModel.ActivityIds.Contains(a.Id))
                 .ToList();
@@ -38,7 +45,12 @@ namespace BusinessLogic.Services
         }
         public List<BookingBusinessModel> GetAllBookings()
         {
-            var bookings = _unitOfWork.BookingRepo.GetAll();
+            var bookings = _unitOfWork.BookingRepo
+                .GetAll()
+                .Include(b => b.Room) 
+                .Include(b => b.Activities)
+                .ToList();
+
             return _mapper.Map<List<BookingBusinessModel>>(bookings);
         }
         public BookingBusinessModel GetBookingByRoomAndTime(int roomNumber, DateTime start, DateTime end)

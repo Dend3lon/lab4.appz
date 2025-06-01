@@ -4,9 +4,10 @@ using DomainData.Models;
 using BusinessLogic.Services;
 using Moq;
 using AutoMapper;
-using BusinessLogic.BusinessModels;
 using Xunit;
 using BusinessLogic;
+using BusinessModels;
+using AutoMapperProfiles;
 
 namespace Tests
 {

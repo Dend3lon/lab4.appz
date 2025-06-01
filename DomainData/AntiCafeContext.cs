@@ -18,6 +18,13 @@ namespace DomainData
         {
             optionsBuilder.UseSqlite($"Data Source={DataBasePath}");
         }
- 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Room)
+                .WithMany(r => r.Bookings)
+                .HasForeignKey(b => b.RoomId);
+        }
     }
 }

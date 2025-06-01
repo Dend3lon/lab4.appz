@@ -61,8 +61,8 @@ public class BookingManagementMenu
             Console.WriteLine($"{room.Id}. Номер: {room.RoomNumber}, Місткість: {room.Capacity}");
         }
         
-        Console.Write("Оберіть ID кімнати: ");
-        if (!int.TryParse(Console.ReadLine(), out int roomId))
+        Console.Write("Оберіть номер кімнати: ");
+        if (!int.TryParse(Console.ReadLine(), out int roomNumber))
         {
             Console.WriteLine("Некоректне значення.");
             return;
@@ -86,7 +86,7 @@ public class BookingManagementMenu
                 Console.WriteLine("Невірний формат дати.");
                 return;
             }
-            booking = _bookingService.GetBookingByRoomAndTime(roomId, startTime, endTime);
+            booking = _bookingService.GetBookingByRoomAndTime(roomNumber, startTime, endTime);
             if (booking != null)
             {
                 Console.WriteLine("Ця кімната вже заброньована на цей час. Спробуйте ще раз.");
@@ -106,7 +106,7 @@ public class BookingManagementMenu
             .Where(id => id.HasValue)
             .Select(id => id.Value)
             .ToList();
-        _bookingService.BookRoom(new BookingBusinessModel {RoomId = roomId, VisitorName = visitorName, StartTime = startTime, EndTime = endTime, ActivityIds = activityIds});
+        _bookingService.BookRoom(new BookingBusinessModel {RoomNumber = roomNumber, VisitorName = visitorName, StartTime = startTime, EndTime = endTime, ActivityIds = activityIds});
 
         Console.WriteLine("Бронювання успішне.");
     }
@@ -129,7 +129,7 @@ public class BookingManagementMenu
         var bookings = _bookingService.GetAllBookings();
         foreach (var booking in bookings)
         {
-            Console.WriteLine($"ID: {booking.Id},Забронював: {booking.VisitorName} Кімната: {booking.RoomId}, {booking.StartTime} - {booking.EndTime},");
+            Console.WriteLine($"ID: {booking.Id},Забронював: {booking.VisitorName} Кімната: {booking.RoomNumber}, {booking.StartTime} - {booking.EndTime},");
             //Console.WriteLine("  Активності: " + string.Join(", ", booking.Activities.Select(a => a.Name)));
         }
     }

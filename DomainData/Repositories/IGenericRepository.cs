@@ -11,6 +11,6 @@ namespace DomainData.Repositories
         void Create(TModel entity);
         void Delete(int id);
         TModel GetById(int id);
-        List<TModel> GetAll();
+        IQueryable<TModel> GetAll();
     }
 }

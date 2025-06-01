@@ -30,9 +30,9 @@ namespace DomainData.Repositories
         {
             return _dbSet.Find(id);
         }
-        public List<TModel> GetAll()
+        public IQueryable<TModel> GetAll()
         {
-            return _dbSet.ToList();
+            return _dbSet.AsQueryable();
         }
     }
    

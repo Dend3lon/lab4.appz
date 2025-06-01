@@ -19,9 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AutoMapperProfiles\AutoMapperProfiles.csproj" />
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
     <ProjectReference Include="..\DomainData\DomainData.csproj" />
-    <ProjectReference Include="..\lab4.appz\lab6.appz.csproj" />
   </ItemGroup>
 
   <ItemGroup>

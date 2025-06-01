@@ -4,9 +4,10 @@ using DomainData.Models;
 using BusinessLogic.Services;
 using Moq;
 using AutoMapper;
-using BusinessLogic.BusinessModels;
-using Xunit;
 using BusinessLogic;
+using Xunit;
+using BusinessModels;
+using AutoMapperProfiles;
 
 namespace Tests
 {
@@ -43,7 +44,7 @@ namespace Tests
         {
             var bookingBusinessModel = new BookingBusinessModel
             {
-                RoomId = 1,
+                RoomNumber = 1,
                 VisitorName = "Test",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now.AddHours(2),
@@ -55,7 +56,7 @@ namespace Tests
 
             _activityRepositoryMock
                 .Setup(a => a.GetAll())
-                .Returns(new List<Activity> { testActivity });
+                .Returns(new List<Activity> { testActivity }.AsQueryable);
 
             _bookingService.BookRoom(bookingBusinessModel); 
 
@@ -96,7 +97,7 @@ namespace Tests
 
             _unitOfWorkMock
                 .Setup(u => u.BookingRepo.GetAll())
-                .Returns(new List<Booking> { testBooking });
+                .Returns(new List<Booking> { testBooking }.AsQueryable);
 
             var result = _bookingService.GetBookingByRoomAndTime(roomNumber, start, end);
 
@@ -110,7 +111,7 @@ namespace Tests
             var testBooking = new Booking { Id = 1, RoomId = roomId };
             _unitOfWorkMock
                 .Setup(u => u.BookingRepo.GetAll())
-                .Returns(new List<Booking> { testBooking });
+                .Returns(new List<Booking> { testBooking }.AsQueryable);
             var result = _bookingService.GetBookingByRoomId(roomId);
 
             Xunit.Assert.Equal(testBooking.Id, result[0].Id);
